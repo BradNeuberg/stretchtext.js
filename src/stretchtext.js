@@ -4,13 +4,11 @@
 
 	function toggleSummary(evt){
 		// Prevent the text from being selected if rapidly clicked.
-		// TODO: LINKS ARE STILL RESOLVING!!!
 		evt.preventDefault();
 
 		var summary = evt.target;
 		var detail = findDetailFor(summary);
-
-		// TODO: MAKE THIS ROBUST TO NO DETAIL ELEMENT BEING FOUND!!!
+		if (!detail) return;
 
 		// CSS Transitions don't work as expected on things set to 'display: none'. Make the
 		// stretch details visible if needed, then use a timeout for the transition to take
@@ -26,9 +24,9 @@
 			detail.classList.toggle('stretchtext-open');
 
 			if (summary.classList.contains('stretchtext-open')){
-				summary.setAttribute('title', TITLE_WHEN_OPEN);
+				setTitle(summary, TITLE_WHEN_OPEN);
 			} else {
-				summary.setAttribute('title', TITLE_WHEN_CLOSED);
+				setTitle(summary, TITLE_WHEN_CLOSED);
 			}
 		}, 1);
 	}
@@ -37,13 +35,29 @@
 		return summary.nodeName.toLowerCase() === 'a';
 	}
 
+	function setTitle(summary, title){
+		// If the user placed a manual title on the summary leave it alone.
+		if (summary.hasAttribute('title')){
+			return;
+		} else {
+			summary.setAttribute('title', title);
+		}
+	}
+
 	function findDetailFor(summary){
 		if (isBlockLevelDetail(summary)){
-			// TODO: Make this robust to incorrect links!!!
 			var id = summary.getAttribute('href').replace(/^#/, '');
-			return document.getElementById(id);
+			var detail = document.getElementById(id);
+			if (!detail && window.console){
+				console.error('No StretchText details element with ID: ' + id);
+			}
+			return detail;
 		} else {
-			return summary.nextElementSibling;
+			var detail = summary.nextElementSibling;
+			if (!detail && window.console){
+				console.error('No StretchText details element found for: ', summary);
+			}
+			return detail;
 		}
 	}
 
@@ -51,7 +65,15 @@
 		var summaries = document.querySelectorAll('[epub-type="stretchsummary"]');
 		Array.prototype.forEach.call(summaries, function(summary){
 			summary.setAttribute('title', TITLE_WHEN_CLOSED);
+
+			// Listen on mousedown instead of click so that we can prevent text
+			// selection if mouse is clicked rapidly.
 			summary.addEventListener('mousedown', toggleSummary);
+
+			// Link resolving can't be canceled in mousedown event, only in click event.
+			summary.addEventListener('click', function(evt){
+				evt.preventDefault();
+			});
 		});
 	}
 

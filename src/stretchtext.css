@@ -11,7 +11,7 @@
 }
 
 [epub-type="stretchsummary"]::after {
-	content: "\00bb";
+	content: "\00bb"; /* >> character */
 	color: #88886d;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -20,8 +20,9 @@
 [epub-type="stretchdetail"] {
 	display: none;
 	opacity: 0;
-	/* TODO: ADD THE TRANSITIONS FOR OTHER BROWSERS!!! */
 	-webkit-transition: opacity 0.2s ease-out;
+	-moz-transition: opacity 0.2s ease-out;
+	-o-transition: opacity 0.2s ease-out;
 	transition: opacity 0.2s ease-out;
 }
 
@@ -30,5 +31,5 @@
 }
 
 [epub-type="stretchsummary"].stretchtext-open::after {
-	content: "\00ab";
+	content: "\00ab"; /* << character */
 }
