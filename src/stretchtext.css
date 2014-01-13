@@ -21,6 +21,11 @@
 	padding-right: 3px;
 }
 
+[epub-type="stretchsummary"] + [epub-type="stretchdetail"],
+.stretchsummary + .stretchdetail {
+	margin-left: 0.1em;
+}
+
 [epub-type="stretchdetail"],
 .stretchdetail {
 	display: none;
