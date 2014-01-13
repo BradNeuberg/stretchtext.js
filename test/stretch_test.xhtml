@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+	<head>
+		<link type="text/css" rel="stylesheet" href="../src/stretchtext.css"></link>
+		<script type="text/javascript" src="../src/stretchtext.js"></script>
+	</head>
+
+	<body>
+		<h1>Using epub:type</h1>
+		<p>There once was a <span epub:type="stretchsummary">girl</span><span epub:type="stretchdetail"> Her name was <span epub:type="stretchsummary">Nancy</span><span epub:type="stretchdetail"> That was my mother's name.</span> Some stuff at the end</span></p>
+		<p>Most scientists accept <a href="#global-warming-details" epub:type="stretchsummary">global warming</a>.</p>
+		<aside id="global-warming-details" epub:type="stretchdetail">
+			<p>More details on global warming. <a epub:type="stretchsummary" href="#evenmore">More supporting evidence</a></p>
+			<ol id="evenmore" epub:type="stretchdetail">
+				<li>Greater degrees of CO<sub>2</sub></li>
+				<li>Evidence of warming <span epub:type="stretchsummary">trend</span><span epub:type="stretchdetail"> It's the truth -- accept it!</span>.</li>
+			</ol>
+		</aside>
+		<p>This is material at the bottom of the page that will get stretched down.</p>
+	</body>
+</html>

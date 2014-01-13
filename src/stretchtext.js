@@ -2,6 +2,8 @@
 	var TITLE_WHEN_CLOSED = 'Expand';
 	var TITLE_WHEN_OPEN = 'Collapse';
 
+	var EPUB_NS = 'http://www.idpf.org/2007/ops';
+
 	function toggleSummary(evt){
 		// Prevent the text from being selected if rapidly clicked.
 		evt.preventDefault();
@@ -61,9 +63,44 @@
 		}
 	}
 
+	function getSummaries(){
+		var results = [],
+			summaries;
+
+		// epub-type
+		summaries = document.querySelectorAll('[epub-type="stretchsummary"]');
+		Array.prototype.forEach.call(summaries, function(result){
+			results.push(result);
+		});
+
+		// CSS class.
+		summaries = document.getElementsByClassName('stretchsummary');
+		Array.prototype.forEach.call(summaries, function(result){
+			results.push(result);
+		});
+
+		// epub:type
+		if (document.evaluate){
+			function nsResolver(prefix) {
+				var ns = {
+					'epub': EPUB_NS
+				};
+				return ns[prefix] || null;
+			};
+			summaries = document.evaluate('//*[@epub:type="stretchsummary"]', document, nsResolver,
+				XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null /* Create new XPathResult. */);
+			var result = summaries.iterateNext();
+			while (result){
+				results.push(result);
+				result = summaries.iterateNext();
+			}
+		}
+
+		return results;
+	}
+
 	function loaded(){
-		var summaries = document.querySelectorAll('[epub-type="stretchsummary"]');
-		Array.prototype.forEach.call(summaries, function(summary){
+		getSummaries().forEach(function(summary){
 			summary.setAttribute('title', TITLE_WHEN_CLOSED);
 
 			// Listen on mousedown instead of click so that we can prevent text
