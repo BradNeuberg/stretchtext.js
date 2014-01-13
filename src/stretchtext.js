@@ -2,8 +2,6 @@
 	var TITLE_WHEN_CLOSED = 'Expand';
 	var TITLE_WHEN_OPEN = 'Collapse';
 
-	var EPUB_NS = 'http://www.idpf.org/2007/ops';
-
 	function toggleSummary(evt){
 		// Prevent the text from being selected if rapidly clicked.
 		evt.preventDefault();
@@ -78,23 +76,6 @@
 		Array.prototype.forEach.call(summaries, function(result){
 			results.push(result);
 		});
-
-		// epub:type
-		if (document.evaluate){
-			function nsResolver(prefix) {
-				var ns = {
-					'epub': EPUB_NS
-				};
-				return ns[prefix] || null;
-			};
-			summaries = document.evaluate('//*[@epub:type="stretchsummary"]', document, nsResolver,
-				XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null /* Create new XPathResult. */);
-			var result = summaries.iterateNext();
-			while (result){
-				results.push(result);
-				result = summaries.iterateNext();
-			}
-		}
 
 		return results;
 	}

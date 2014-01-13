@@ -1,6 +1,4 @@
-@namespace epub url(http://www.idpf.org/2007/ops);
 
-[epub|type="stretchsummary"],
 [epub-type="stretchsummary"],
 .stretchsummary {
 	border: 1px dashed gray;
@@ -10,13 +8,11 @@
 	text-decoration: none;
 }
 
-[epub|type="stretchsummary"]:hover,
 [epub-type="stretchsummary"]:hover,
 .stretchsummary:hover {
 	border-style: solid;
 }
 
-[epub|type="stretchsummary"]::after,
 [epub-type="stretchsummary"]::after,
 .stretchsummary::after {
 	content: "\00bb"; /* >> character */
@@ -25,7 +21,6 @@
 	padding-right: 3px;
 }
 
-[epub|type="stretchdetail"],
 [epub-type="stretchdetail"],
 .stretchdetail {
 	display: none;
@@ -36,13 +31,11 @@
 	transition: opacity 0.2s ease-out;
 }
 
-[epub|type="stretchdetail"].stretchtext-open,
 [epub-type="stretchdetail"].stretchtext-open,
 .stretchdetail.stretchtext-open {
 	opacity: 1;
 }
 
-[epub|type="stretchsummary"].stretchtext-open::after,
 [epub-type="stretchsummary"].stretchtext-open::after,
 .stretchsummary.stretchtext-open::after {
 	content: "\00ab"; /* << character */
