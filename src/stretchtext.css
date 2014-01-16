@@ -3,7 +3,6 @@
 .stretchsummary {
 	border: 1px dashed gray;
 	cursor: pointer;
-	padding: 1px;
 	color: inherit;
 	text-decoration: none;
 }
@@ -39,6 +38,7 @@
 [epub-type="stretchdetail"].stretchtext-open,
 .stretchdetail.stretchtext-open {
 	opacity: 1;
+	background-color: #FAF0E6;
 }
 
 [epub-type="stretchsummary"].stretchtext-open::after,
