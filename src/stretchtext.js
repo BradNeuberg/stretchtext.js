@@ -1,40 +1,42 @@
-(function() {
-	"use strict";
+(function(){
+	'use strict';
+
 	var TITLE_WHEN_CLOSED = 'Expand';
 	var TITLE_WHEN_OPEN = 'Collapse';
 
 	// requestAnimationFrame shimming.
-	var rAF = window.requestAnimationFrame       ||
-		        window.webkitRequestAnimationFrame ||
-		        window.mozRequestAnimationFrame    ||
-		        window.oRequestAnimationFrame      ||
-		        window.msRequestAnimationFrame     ||
-		        function(callback) {
-		          window.setTimeout(callback, 1000 / 60);
-		        };
+	var requestAnimationFrame =
+		window.requestAnimationFrame       ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame    ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
+        function(callback){
+        	window.setTimeout(callback, 1000 / 60);
+        };
 
-	function toggleSummary(evt) {
+	function toggleSummary(evt){
 		// Prevent the text from being selected if rapidly clicked.
 		evt.preventDefault();
 
 		var summary = evt.target;
 		var detail = findDetailFor(summary);
-		if (!detail) { return; }
+		if (!detail){ return; }
 
 		// CSS Transitions don't work as expected on things set to 'display: none'. Make the
 		// stretch details visible if needed, then use a timeout for the transition to take
 		// effect.
-		if (summary.classList.contains('stretchtext-open')) {
+		if (summary.classList.contains('stretchtext-open')){
 			detail.style.display = 'none';
 		} else {
 			detail.style.display = isBlockLevelDetail(summary) ? 'block' : 'inline';
 		}
 
-		rAF(function() {
+		requestAnimationFrame(function(){
 			summary.classList.toggle('stretchtext-open');
 			detail.classList.toggle('stretchtext-open');
 
-			if (summary.classList.contains('stretchtext-open')) {
+			if (summary.classList.contains('stretchtext-open')){
 				setTitle(summary, TITLE_WHEN_OPEN);
 			} else {
 				setTitle(summary, TITLE_WHEN_CLOSED);
@@ -42,21 +44,21 @@
 		});
 	}
 
-	function isBlockLevelDetail(summary) {
+	function isBlockLevelDetail(summary){
 		return summary.nodeName.toLowerCase() === 'a';
 	}
 
-	function setTitle(summary, title) {
+	function setTitle(summary, title){
 		// If the user placed a manual title on the summary leave it alone.
-		if (summary.hasAttribute('title')) {
+		if (summary.hasAttribute('title')){
 			return;
 		} else {
 			summary.setAttribute('title', title);
 		}
 	}
 
-	function findDetailFor(summary) {
-		if (isBlockLevelDetail(summary)) {
+	function findDetailFor(summary){
+		if (isBlockLevelDetail(summary)){
 			var id = summary.getAttribute('href').replace(/^#/, '');
 			var detail = document.getElementById(id);
 			if (!detail && window.console){
@@ -65,26 +67,26 @@
 			return detail;
 		} else {
 			var detail = summary.nextElementSibling;
-			if (!detail && window.console) {
+			if (!detail && window.console){
 				console.error('No StretchText details element found for: ', summary);
 			}
 			return detail;
 		}
 	}
 
-	function getSummaries() {
+	function getSummaries(){
 		var results = [],
 			summaries;
 
 		// epub-type
 		summaries = document.querySelectorAll('[epub-type="stretchsummary"]');
-		Array.prototype.forEach.call(summaries, function(result) {
+		Array.prototype.forEach.call(summaries, function(result){
 			results.push(result);
 		});
 
 		// CSS class.
 		summaries = document.getElementsByClassName('stretchsummary');
-		Array.prototype.forEach.call(summaries, function(result) {
+		Array.prototype.forEach.call(summaries, function(result){
 			results.push(result);
 		});
 
@@ -92,11 +94,11 @@
 	}
 
 	var loadedCalled = false;
-	function loaded() {
-		if (loadedCalled) { return; }
+	function loaded(){
+		if (loadedCalled){ return; }
 		loadedCalled = true;
-		// FIXME(slightlyoff): add a global handlers instead of one per item.
-		getSummaries().forEach(function(summary) {
+		// FIXME(slightlyoff): Add global handlers instead of one per item.
+		getSummaries().forEach(function(summary){
 			summary.setAttribute('title', TITLE_WHEN_CLOSED);
 
 			// Listen on mousedown instead of click so that we can prevent text
@@ -107,12 +109,12 @@
 
 			// Link resolving can't be canceled in mousedown event, only in click
 			// event.
-			summary.addEventListener('click', function(e) {e .preventDefault(); });
+			summary.addEventListener('click', function(e){e .preventDefault(); });
 		});
 	}
 
 	window.addEventListener('DOMContentLoaded', loaded);
-	if (document.readyState == "complete") {
+	if (document.readyState == "complete"){
 		loaded();
 	}
 })();
